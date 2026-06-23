@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 
+export const revalidate = 0
+
 export default async function Storefront() {
   const products = await prisma.product.findMany({
     where: { active: true },
