@@ -1,7 +1,14 @@
 import { Resend } from 'resend'
 import { prisma } from './prisma'
 
-const resend = new Resend(process.env.RESEND_API_KEY!)
+let resendClient: Resend | null = null
+
+function getResend(): Resend {
+  if (!resendClient) {
+    resendClient = new Resend(process.env.RESEND_API_KEY || 're_dummy')
+  }
+  return resendClient
+}
 
 export async function sendPurchaseEmail(
   to: string,
@@ -9,8 +16,8 @@ export async function sendPurchaseEmail(
   downloadUrl: string,
   orderId: string
 ): Promise<void> {
-  const { data, error } = await resend.emails.send({
-    from: process.env.FROM_EMAIL!,
+  const { data, error } = await getResend().emails.send({
+    from: process.env.FROM_EMAIL || 'onboarding@resend.dev',
     to,
     subject: `Your download for ${productName} is ready`,
     html: `
