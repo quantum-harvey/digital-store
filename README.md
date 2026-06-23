@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Digital Store — Next.js SaaS Starter Kit
 
-## Getting Started
+A fully automated digital product store built with Next.js 16, Stripe, Prisma, and Resend. Zero inventory, instant fulfillment, 100% margin.
 
-First, run the development server:
+## What This Is
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+A production-ready e-commerce system for selling digital products. Customers pay through Stripe, the webhook fires automatically, an order is created in the database, a secure download token is generated, and an email with the download link is sent — all without any human intervention.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Next.js 16** (App Router, Turbopack)
+- **TypeScript**
+- **Tailwind CSS**
+- **Prisma ORM** (PostgreSQL)
+- **Stripe** (payments + webhooks)
+- **Resend** (transactional email)
+- **Vercel** (deployment)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Features
 
-## Learn More
+- Storefront with product grid
+- Product detail pages with checkout
+- Stripe Checkout integration
+- Automated webhook handler (order creation, token generation, email delivery)
+- Secure download tokens with HMAC signing and expiry
+- Download limit enforcement (5 downloads per token, 24-hour expiry)
+- Admin panel for product management (create, edit, delete)
+- Email logging
+- Refund handling
+- Responsive design
 
-To learn more about Next.js, take a look at the following resources:
+## Setup Instructions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 1. Install Dependencies
