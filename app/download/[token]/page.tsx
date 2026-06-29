@@ -7,6 +7,7 @@ export default function DownloadPage() {
   const params = useParams()
   const token = params.token as string
   const [status, setStatus] = useState<'loading' | 'ready' | 'expired' | 'error'>('loading')
+  const [reason, setReason] = useState('')
   const [productInfo, setProductInfo] = useState<{ name: string; fileName: string; fileUrl: string } | null>(null)
 
   useEffect(() => {
@@ -17,9 +18,10 @@ export default function DownloadPage() {
       if (data.valid) {
         setProductInfo({ name: data.productName, fileName: data.fileName, fileUrl: data.fileUrl })
         setStatus('ready')
-      } else if (data.reason === 'expired') {
+      } else if (data.reason === 'expired' || data.reason === 'limit_reached') {
         setStatus('expired')
       } else {
+        setReason(data.reason || 'unknown')
         setStatus('error')
       }
     }
@@ -54,6 +56,7 @@ export default function DownloadPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Invalid Link</h1>
           <p className="text-gray-600">This download link is not valid.</p>
+          {reason && <p className="mt-2 text-xs text-gray-400">Reason: {reason}</p>}
         </div>
       </div>
     )

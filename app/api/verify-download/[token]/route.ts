@@ -18,13 +18,26 @@ function toDirectDownloadUrl(url: string): string {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { token: string } }
+  { params }: { params: Promise<{ token: string }> }
 ) {
-  const { token } = params
+  // Next.js 15+/16: route params are async and MUST be awaited. Reading them
+  // synchronously yields undefined, which silently breaks every download link.
+  const { token } = await params
+
+  if (!process.env.DOWNLOAD_TOKEN_SECRET) {
+    console.error('[verify-download] DOWNLOAD_TOKEN_SECRET is not set at runtime')
+    return NextResponse.json({ valid: false, reason: 'server_misconfig' }, { status: 500 })
+  }
+
+  if (!token) {
+    console.error('[verify-download] no token received in params')
+    return NextResponse.json({ valid: false, reason: 'no_token' }, { status: 400 })
+  }
 
   const validation = validateDownloadToken(token)
   if (!validation) {
-    return NextResponse.json({ valid: false, reason: 'invalid' }, { status: 400 })
+    console.error('[verify-download] signature/format invalid, token prefix:', token.slice(0, 12))
+    return NextResponse.json({ valid: false, reason: 'bad_signature' }, { status: 400 })
   }
 
   const order = await prisma.order.findUnique({
@@ -33,7 +46,8 @@ export async function GET(
   })
 
   if (!order) {
-    return NextResponse.json({ valid: false, reason: 'invalid' }, { status: 404 })
+    console.error('[verify-download] no order for token prefix:', token.slice(0, 12))
+    return NextResponse.json({ valid: false, reason: 'order_not_found' }, { status: 404 })
   }
 
   if (order.status !== 'paid') {
@@ -41,7 +55,7 @@ export async function GET(
   }
 
   if (order.downloadCount >= order.maxDownloads) {
-    return NextResponse.json({ valid: false, reason: 'expired' }, { status: 403 })
+    return NextResponse.json({ valid: false, reason: 'limit_reached' }, { status: 403 })
   }
 
   if (new Date() > order.tokenExpiresAt) {
