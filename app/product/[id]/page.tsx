@@ -101,7 +101,7 @@ export default function ProductPage() {
                 <span className="text-gray-400">·</span>
                 <span className="text-gray-500">Instant download</span>
               </div>
-              <p className="text-sm text-gray-400">{product.fileSize} · {product.fileName}</p>
+              <p className="text-sm text-gray-400">{/^[\d.]+$/.test(product.fileSize) ? `${product.fileSize} MB` : product.fileSize} · {product.fileName}</p>
             </div>
 
             <form onSubmit={handlePurchase} className="space-y-4">

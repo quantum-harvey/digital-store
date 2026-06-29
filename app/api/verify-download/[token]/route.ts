@@ -2,6 +2,20 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { validateDownloadToken } from '@/lib/tokens'
 
+/**
+ * Google Drive "share" links (…/file/d/<id>/view) open a preview page and do
+ * NOT download the file — and the browser's `download` attribute is ignored for
+ * cross-origin URLs. Convert any Drive link to its direct-download form so the
+ * customer actually receives their file. Non-Drive URLs are returned unchanged.
+ */
+function toDirectDownloadUrl(url: string): string {
+  const m = url.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=\w+&)?id=)([\w-]+)/)
+  if (m) {
+    return `https://drive.google.com/uc?export=download&id=${m[1]}`
+  }
+  return url
+}
+
 export async function GET(
   req: NextRequest,
   { params }: { params: { token: string } }
@@ -43,6 +57,6 @@ export async function GET(
     valid: true,
     productName: order.product.name,
     fileName: order.product.fileName,
-    fileUrl: order.product.fileUrl,
+    fileUrl: toDirectDownloadUrl(order.product.fileUrl),
   })
 }

@@ -72,10 +72,15 @@ export default function DownloadPage() {
         <a
           href={productInfo?.fileUrl}
           download={productInfo?.fileName}
-          className="display: inline-block bg-black text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-black text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
         >
           Download {productInfo?.fileName}
         </a>
+        <p className="text-xs text-gray-400 mt-4">
+          Trouble downloading? Email us and we&apos;ll sort it out right away.
+        </p>
       </div>
     </div>
   )

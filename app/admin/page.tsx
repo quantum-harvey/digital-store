@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 interface Product {
   id: string
@@ -20,6 +20,9 @@ export default function AdminPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Product | null>(null)
+  const [adminKey, setAdminKey] = useState('')
+  const [authed, setAuthed] = useState(false)
+  const [authError, setAuthError] = useState('')
 
   const [form, setForm] = useState({
     name: '',
@@ -33,14 +36,29 @@ export default function AdminPage() {
     featured: false,
   })
 
-  useEffect(() => {
-    fetchProducts()
-  }, [])
-
-  async function fetchProducts() {
-    const res = await fetch('/api/products')
+  async function fetchProducts(key = adminKey) {
+    const res = await fetch('/api/products', {
+      headers: { 'x-admin-key': key },
+    })
     const data = await res.json()
     setProducts(data)
+    return data
+  }
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setAuthError('')
+    try {
+      const data = await fetchProducts(adminKey)
+      // The admin-only `fileUrl` field is returned only when the key is valid.
+      if (Array.isArray(data) && (data.length === 0 || 'fileUrl' in data[0])) {
+        setAuthed(true)
+      } else {
+        setAuthError('Incorrect password.')
+      }
+    } catch {
+      setAuthError('Could not connect. Try again.')
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -55,13 +73,13 @@ export default function AdminPage() {
     if (editing) {
       await fetch('/api/products', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
         body: JSON.stringify({ ...payload, id: editing.id }),
       })
     } else {
       await fetch('/api/products', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
         body: JSON.stringify(payload),
       })
     }
@@ -76,7 +94,10 @@ export default function AdminPage() {
   }
 
   async function handleDelete(id: string) {
-    await fetch(`/api/products?id=${id}`, { method: 'DELETE' })
+    await fetch(`/api/products?id=${id}`, {
+      method: 'DELETE',
+      headers: { 'x-admin-key': adminKey },
+    })
     fetchProducts()
   }
 
@@ -94,6 +115,37 @@ export default function AdminPage() {
       featured: product.featured,
     })
     setShowForm(true)
+  }
+
+  if (!authed) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <form
+          onSubmit={handleLogin}
+          className="max-w-sm w-full bg-white rounded-xl border border-gray-200 p-8 space-y-4"
+        >
+          <h1 className="text-xl font-bold">Admin Login</h1>
+          <p className="text-sm text-gray-500">
+            Enter the admin password to manage products.
+          </p>
+          <input
+            type="password"
+            required
+            value={adminKey}
+            onChange={(e) => setAdminKey(e.target.value)}
+            placeholder="Admin password"
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+          />
+          {authError && <p className="text-sm text-red-600">{authError}</p>}
+          <button
+            type="submit"
+            className="w-full bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800"
+          >
+            Log in
+          </button>
+        </form>
+      </div>
+    )
   }
 
   return (

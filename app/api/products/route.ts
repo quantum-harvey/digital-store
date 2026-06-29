@@ -1,16 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { isAuthorized } from '@/lib/auth'
 
-// GET all products (for admin)
-export async function GET() {
+// GET products.
+// IMPORTANT: this endpoint is public (the storefront/product pages call it).
+// It must NEVER expose fileUrl/fileName — those are the paid digital goods and
+// would let anyone download products for free. Admins (authorized) get full data.
+export async function GET(req: NextRequest) {
+  const authed = isAuthorized(req)
+
   const products = await prisma.product.findMany({
     orderBy: { createdAt: 'desc' },
   })
-  return NextResponse.json(products)
+
+  if (authed) {
+    return NextResponse.json(products)
+  }
+
+  // Public response: only active products, with the actual download URL
+  // stripped out so the paid goods can't be grabbed for free. (fileName is
+  // harmless and is shown on the product page, so it stays.)
+  const safe = products
+    .filter((p) => p.active)
+    .map((p) => {
+      const rest: Record<string, unknown> = { ...p }
+      delete rest.fileUrl
+      return rest
+    })
+  return NextResponse.json(safe)
 }
 
-// POST new product
+// POST new product (admin only)
 export async function POST(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
   const body = await req.json()
 
   const product = await prisma.product.create({
@@ -30,8 +54,11 @@ export async function POST(req: NextRequest) {
   return NextResponse.json(product)
 }
 
-// DELETE product
+// DELETE product (admin only)
 export async function DELETE(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
   const { searchParams } = new URL(req.url)
   const id = searchParams.get('id')
 
@@ -43,8 +70,11 @@ export async function DELETE(req: NextRequest) {
   return NextResponse.json({ success: true })
 }
 
-// UPDATE product
+// UPDATE product (admin only)
 export async function PATCH(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
   const body = await req.json()
 
   const product = await prisma.product.update({
