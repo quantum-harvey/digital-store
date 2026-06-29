@@ -62,7 +62,7 @@ export default function ProductPage() {
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#06060b] text-gray-400">
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0608] text-gray-400">
         <p>Loading product…</p>
       </div>
     )
@@ -79,19 +79,19 @@ export default function ProductPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#06060b] text-white overflow-x-hidden selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-[#0a0608] text-white overflow-x-hidden selection:bg-red-500/30">
       <style dangerouslySetInnerHTML={{ __html: `
         .glow { position:absolute; border-radius:50%; filter: blur(130px); pointer-events:none; z-index:0; }
-        .glow-1 { background:#6366f1; width:520px; height:520px; top:-180px; left:-160px; opacity:.28; }
-        .glow-2 { background:#d946ef; width:420px; height:420px; top:200px; right:-140px; opacity:.20; }
-        .gradient-text { background:linear-gradient(120deg,#818cf8,#c084fc 50%,#f0abfc); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-        .nav-blur { backdrop-filter: blur(20px); background: rgba(6,6,11,.65); }
+        .glow-1 { background:#ef4444; width:520px; height:520px; top:-180px; left:-160px; opacity:.26; }
+        .glow-2 { background:#7f1d1d; width:420px; height:420px; top:200px; right:-140px; opacity:.22; }
+        .gradient-text { background:linear-gradient(120deg,#fca5a5,#ef4444 50%,#dc2626); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+        .nav-blur { backdrop-filter: blur(20px); background: rgba(10,6,8,.65); }
         .card { background: rgba(255,255,255,.025); border:1px solid rgba(255,255,255,.08); backdrop-filter: blur(10px); }
-        .cta { background: linear-gradient(120deg,#6366f1,#a855f7); transition: transform .25s, box-shadow .25s; }
-        .cta:hover { transform: translateY(-2px); box-shadow: 0 14px 50px -12px rgba(129,140,248,.7); }
+        .cta { background: linear-gradient(120deg,#ef4444,#b91c1c); transition: transform .25s, box-shadow .25s; }
+        .cta:hover { transform: translateY(-2px); box-shadow: 0 14px 50px -12px rgba(239,68,68,.6); }
         .cta:disabled { opacity:.55; transform:none; box-shadow:none; cursor:not-allowed; }
         .field { background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); }
-        .field:focus { outline:none; border-color:#818cf8; box-shadow:0 0 0 3px rgba(129,140,248,.25); }
+        .field:focus { outline:none; border-color:#ef4444; box-shadow:0 0 0 3px rgba(239,68,68,.25); }
       `}} />
 
       <div className="glow glow-1" />
@@ -101,7 +101,7 @@ export default function ProductPage() {
       <nav className="fixed top-0 w-full z-50 nav-blur border-b border-white/5">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center font-black text-sm">BK</div>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-800 flex items-center justify-center font-black text-sm">BK</div>
             <span className="font-bold text-lg tracking-tight">Digital Supply BK</span>
           </Link>
           <Link href="/" className="text-sm text-gray-400 hover:text-white transition-colors">← Back to store</Link>
@@ -120,7 +120,7 @@ export default function ProductPage() {
               <ul className="space-y-3">
                 {included.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-sm text-gray-300">
-                    <span className="mt-0.5 text-emerald-400">✓</span>
+                    <span className="mt-0.5 text-red-400">✓</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -130,7 +130,7 @@ export default function ProductPage() {
 
           {/* Right: details + buy box */}
           <div className="flex flex-col">
-            <p className="text-xs text-indigo-300 uppercase tracking-[0.2em] mb-3">{product.category}</p>
+            <p className="text-xs text-red-400 uppercase tracking-[0.2em] mb-3">{product.category}</p>
             <h1 className="text-4xl md:text-5xl font-black leading-tight mb-5">{product.name}</h1>
             <p className="text-gray-400 text-lg leading-relaxed mb-6">{product.description}</p>
 

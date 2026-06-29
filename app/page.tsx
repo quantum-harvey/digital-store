@@ -14,7 +14,7 @@ export default async function Storefront() {
   const year = new Date().getFullYear()
 
   return (
-    <div className="min-h-screen bg-[#06060b] text-white overflow-x-hidden selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-[#0a0608] text-white overflow-x-hidden selection:bg-red-500/30">
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes float { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,30px) scale(1.05); } }
         @keyframes fadeUp { from { opacity:0; transform: translateY(28px); } to { opacity:1; transform: translateY(0); } }
@@ -22,20 +22,20 @@ export default async function Storefront() {
         @keyframes pulseDot { 0%,100% { opacity:1; } 50% { opacity:.3; } }
         .reveal { opacity:0; animation: fadeUp .8s cubic-bezier(.2,.7,.2,1) forwards; }
         .glow { position:absolute; border-radius:50%; filter: blur(130px); pointer-events:none; z-index:0; }
-        .glow-1 { background:#6366f1; width:560px; height:560px; top:-160px; left:-180px; opacity:.35; animation: float 11s ease-in-out infinite; }
-        .glow-2 { background:#d946ef; width:460px; height:460px; top:240px; right:-160px; opacity:.28; animation: float 13s ease-in-out infinite reverse; }
-        .glow-3 { background:#0ea5e9; width:420px; height:420px; bottom:-120px; left:30%; opacity:.18; animation: float 15s ease-in-out infinite; }
+        .glow-1 { background:#ef4444; width:560px; height:560px; top:-160px; left:-180px; opacity:.30; animation: float 11s ease-in-out infinite; }
+        .glow-2 { background:#b91c1c; width:460px; height:460px; top:240px; right:-160px; opacity:.26; animation: float 13s ease-in-out infinite reverse; }
+        .glow-3 { background:#7f1d1d; width:420px; height:420px; bottom:-120px; left:30%; opacity:.22; animation: float 15s ease-in-out infinite; }
         .grid-bg { background-image:
-            linear-gradient(rgba(99,102,241,.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99,102,241,.05) 1px, transparent 1px);
+            linear-gradient(rgba(239,68,68,.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(239,68,68,.05) 1px, transparent 1px);
           background-size: 56px 56px;
           mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%); }
-        .gradient-text { background:linear-gradient(120deg,#818cf8,#c084fc 45%,#f0abfc); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-        .nav-blur { backdrop-filter: blur(20px); background: rgba(6,6,11,.65); }
+        .gradient-text { background:linear-gradient(120deg,#fca5a5,#ef4444 45%,#dc2626); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+        .nav-blur { backdrop-filter: blur(20px); background: rgba(10,6,8,.65); }
         .card { background: rgba(255,255,255,.025); border:1px solid rgba(255,255,255,.07); backdrop-filter: blur(10px); transition: transform .4s cubic-bezier(.2,.7,.2,1), border-color .4s, background .4s; }
-        .card:hover { transform: translateY(-8px); border-color: rgba(129,140,248,.5); background: rgba(255,255,255,.05); }
-        .cta { background: linear-gradient(120deg,#6366f1,#a855f7); position:relative; overflow:hidden; transition: transform .25s, box-shadow .25s; }
-        .cta:hover { transform: translateY(-2px); box-shadow: 0 14px 50px -12px rgba(129,140,248,.7); }
+        .card:hover { transform: translateY(-8px); border-color: rgba(239,68,68,.5); background: rgba(255,255,255,.05); }
+        .cta { background: linear-gradient(120deg,#ef4444,#b91c1c); position:relative; overflow:hidden; transition: transform .25s, box-shadow .25s; }
+        .cta:hover { transform: translateY(-2px); box-shadow: 0 14px 50px -12px rgba(239,68,68,.6); }
         .cta::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent); background-size:500px 100%; animation: shimmer 3.5s linear infinite; }
         .chip { background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.09); }
       `}} />
@@ -50,7 +50,7 @@ export default async function Storefront() {
       <nav className="fixed top-0 w-full z-50 nav-blur border-b border-white/5">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center font-black text-sm shadow-lg shadow-indigo-500/30">BK</div>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-800 flex items-center justify-center font-black text-sm shadow-lg shadow-red-500/30">BK</div>
             <span className="font-bold text-lg tracking-tight">Digital Supply BK</span>
           </div>
           <div className="hidden sm:flex items-center gap-7 text-sm text-gray-400">
@@ -143,11 +143,11 @@ export default async function Storefront() {
                   </div>
                 </div>
                 <div className="p-6 flex flex-col flex-1">
-                  <h3 className="font-bold text-lg mb-2 group-hover:text-indigo-300 transition-colors">{product.name}</h3>
+                  <h3 className="font-bold text-lg mb-2 group-hover:text-red-400 transition-colors">{product.name}</h3>
                   <p className="text-sm text-gray-400 line-clamp-2 mb-5 flex-1">{product.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-2xl font-black gradient-text">${(product.price / 100).toFixed(2)}</span>
-                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-300 group-hover:gap-2.5 transition-all">
+                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-red-400 group-hover:gap-2.5 transition-all">
                       View <span aria-hidden>→</span>
                     </span>
                   </div>
@@ -181,7 +181,7 @@ export default async function Storefront() {
 
       {/* Guarantee band */}
       <section className="relative z-10 max-w-4xl mx-auto px-6 py-16">
-        <div className="card rounded-3xl p-10 text-center" style={{ background: 'linear-gradient(135deg, rgba(99,102,241,.12), rgba(217,70,239,.08))' }}>
+        <div className="card rounded-3xl p-10 text-center" style={{ background: 'linear-gradient(135deg, rgba(239,68,68,.12), rgba(127,29,29,.10))' }}>
           <div className="text-4xl mb-4">🤝</div>
           <h2 className="text-2xl md:text-3xl font-black mb-3">Our no-nonsense guarantee</h2>
           <p className="text-gray-300 max-w-xl mx-auto leading-relaxed">
@@ -222,7 +222,7 @@ export default async function Storefront() {
       <footer className="relative z-10 border-t border-white/5 py-10 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center font-black text-xs">BK</div>
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-red-500 to-red-800 flex items-center justify-center font-black text-xs">BK</div>
             <span className="font-semibold text-gray-300">Digital Supply BK</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
